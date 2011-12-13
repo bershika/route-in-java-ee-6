@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="map">
+	</ui:define>
+	<ui:define name="content">
+		<h:form prependId="false">
+			<p:panel header="#{currentHub.shortName}" id="hub">
+				<table>
+					<tr>
+						<td><h:panelGrid columns="4">
+								<f:facet name="header">
+									<p:commandButton value="Save Coefficients" update="hub"
+										actionListener="#{hubController.saveHub}" />
+									<h:selectOneRadio value="#{currentHub.manualMode}">
+										<f:selectItem itemLabel="Manual" itemValue="true" />
+										<f:selectItem itemLabel="Generated" itemValue="false" />
+									</h:selectOneRadio>
+
+								</f:facet>
+  a1: <p:inplace style="color:#{currentHub.manualMode?'red':'green'};"><h:inputText id="a1" value="#{currentHub.a1}" size="4" style="color:#{currentHub.manualMode?'red':'#4F4F4F'};"/></p:inplace>
+								<h:outputText value="#{currentHub.ga1}" style="color:#{currentHub.manualMode?'#4F4F4F':'red'};"/>
+								<p:message for="a1" />
+  b1: <p:inplace style="color:#{currentHub.manualMode?'red':'green'};"><h:inputText id="b1" value="#{currentHub.b1}" size="4" style="color:#{currentHub.manualMode?'red':'#4F4F4F'};"/></p:inplace>
+								<h:outputText value="#{currentHub.gb1}" style="color:#{currentHub.manualMode?'#4F4F4F':'red'};"/>
+								<p:message for="b1" />
+  a2: <p:inplace style="color:#{currentHub.manualMode?'red':'green'};"><h:inputText id="a2" value="#{currentHub.a2}" size="4" style="color:#{currentHub.manualMode?'red':'#4F4F4F'};"/></p:inplace>
+								<h:outputText value="#{currentHub.ga2}" style="color:#{currentHub.manualMode?'#4F4F4F':'red'};"/>
+								<p:message for="a2" />
+  b2: <p:inplace style="color:#{currentHub.manualMode?'red':'green'};"><h:inputText id="b2" value="#{currentHub.b2}" size="4" style="color:#{currentHub.manualMode?'red':'#4F4F4F'};"/></p:inplace>
+								<h:outputText value="#{currentHub.gb2}" style="color:#{currentHub.manualMode?'#4F4F4F':'red'};"/>
+								<p:message for="b2" />
+							</h:panelGrid></td>
+						<td><p:dataTable id="services" var="s"
+								value="#{currentHub.services}">
+								<f:facet name="header">
+									<p:commandButton value="Add Service" update="services, growl"
+										actionListener="#{hubController.addServiceRow}" />
+								</f:facet>
+								<p:column headerText="Rate">
+									<h:inputText value="#{s.rate}" size="4" rendered="#{s.rate eq 0}" />
+									<h:outputText value="#{s.rate} $" rendered="#{s.rate gt 0}"/>
+								</p:column>
+								<p:column headerText="Notes">
+									<p:inplace style="color:green;" rendered="#{s.rate gt 0}"><h:inputText value="#{s.notes}" size="10"/></p:inplace>
+									<h:inputText value="#{s.notes}" size="10" rendered="#{s.rate eq 0}"/>
+								</p:column>
+								<p:column headerText="Action">
+									<h:panelGrid columns="2" cellpadding="2">
+										<p:commandButton update="hub" image="ui-icon ui-icon-disk"
+											title="Save" action="#{hubController.saveService}">
+											<f:setPropertyActionListener value="#{s}"
+												target="#{hubController.selectedService}" />
+										</p:commandButton>
+										<p:commandButton update="hub" image="ui-icon ui-icon-close"
+											title="Delete" action="#{hubController.deleteService}">
+											<f:setPropertyActionListener value="#{s}"
+												target="#{hubController.selectedService}" />
+										</p:commandButton>
+									</h:panelGrid>
+								</p:column>
+							</p:dataTable></td>
+					</tr>
+				</table>
+				<div
+					class="ui-menu ui-menubar ui-widget ui-widget-content ui-corner-all ui-helper-clearfix"
+					style="width: 600px">
+					<p:growl id="growl" showDetail="true" />
+					<h:outputText id="totalPoints" value="Total points : #{currentHub.totalPoints}" />
+					<p:commandButton type="button" value="View Points"
+						onclick="points.show()" />
+					<p:commandButton type="button" value="Add Points"
+						onclick="newPoints.show()" />
+					<p:lineChart id="chart" value="#{currentHub.chartModel}">
+						<p:ajax event="itemSelect" listener="#{hubController.pointSelect}" update="growl" /> </p:lineChart>
+				</div>
+				<p:dialog widgetVar="points">
+					<h:panelGrid id="points">
+						<p:dataTable var="p" value="#{currentHub.sortedPoints}"
+							paginator="true" rows="10">
+							<f:facet name="header">
+								<h:outputText value="Points" />
+							</f:facet>
+							<p:column headerText="Destination" sortBy="#{p.destName}">
+								<h:outputText value="#{p.destName} , #{p.destState}" />
+							</p:column>
+							<p:column headerText="Distance" sortBy="#{p.route.distance}">
+								<h:outputText value="#{p.route.distance  / 1609.344}">
+									<f:convertNumber maxFractionDigits="2" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Rate" sortBy="#{p.rate}">
+								<h:outputText value="#{p.rate}" size="6"/>
+							</p:column>
+							<p:column headerText="Fake">
+								<h:selectBooleanCheckbox value="#{p.fake}" />
+							</p:column>
+							<p:column headerText="Date" sortBy="#{p.createdDate}">
+								<h:outputText value="#{p.createdDate}" >
+								 <f:convertDateTime dateStyle="full" type="date" /></h:outputText>
+							</p:column>
+							<p:column headerText="Action">
+							<h:panelGrid columns="2" cellpadding="2" border="0">
+								<p:commandButton proccess="points" update="points chart"
+									image="ui-icon ui-icon-disk" title="Save"
+									action="#{hubController.savePoint}">
+									<f:setPropertyActionListener value="#{p}"
+										target="#{hubController.selectedPoint}" />
+								</p:commandButton>
+								<p:commandButton proccess="points" update="points chart"
+									image="ui-icon ui-icon-close" title="Delete"
+									action="#{hubController.deletePoint}">
+									<f:setPropertyActionListener value="#{p}"
+										target="#{hubController.selectedPoint}" />
+								</p:commandButton>
+								</h:panelGrid>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</p:dialog>
+				<p:dialog header="Enter points info" widgetVar="newPoints">
+					<p:inputTextarea value="#{hubController.pointsTA}" style="width:300px;height:100px;" effectDuration="400"/>
+					<p:commandButton update="hub growl totalPoints" value="Upload"
+						action="#{hubController.uploadPoints}" />
+				</p:dialog>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:p="http://primefaces.org/ui"
+   template="/WEB-INF/templates/default.xhtml">
+    <ui:define name="map">
+   </ui:define>
+   <ui:define name="content">
+   <h:form>
+   <p:commandButton value="Create New Hub" type="button"
+                 onclick="newHub.show()"/>
+   <p:dataTable id="hubs" var="h" value="#{menu.hubList}">  
+  
+        <p:column headerText="Name">  
+            <h:outputText value="#{h}" />  
+        </p:column> 
+         <p:column>
+            <a href="#{request.contextPath}/rest/hubs/#{h}">/rest/hubs/#{h}</a>
+         </p:column> 
+        <p:column style="width:30px">  
+             <h:panelGrid columns="3" styleClass="actions" cellpadding="2" border="0">  
+                 <p:commandButton update=":form:display" image="ui-icon ui-icon-search" title="View"
+                 action="#{menu.onHubSelect}" ajax="false">  
+                     <f:setPropertyActionListener value="#{h}" target="#{menu.selectedHub}"/>
+                 </p:commandButton>  
+             </h:panelGrid>  
+        </p:column>  
+  
+    </p:dataTable> 
+	<p:dialog header="Enter Hub Name" widgetVar="newHub">
+				<p:inputText value="#{menu.newHubName}" />
+				<p:commandButton value="Create"
+                 action="#{menu.createHub}"/>
+	</p:dialog>
+	</h:form>
+	
+   </ui:define>
+</ui:composition>
