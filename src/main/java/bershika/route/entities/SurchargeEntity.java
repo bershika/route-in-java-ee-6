@@ -1,11 +1,13 @@
-package bershika.route.model;
+package bershika.route.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
-public class Surcharge {
+@Table(name="SURCHARGE")
+public class SurchargeEntity {
 	@Id
 	private String email;
 	private float value;

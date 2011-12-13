@@ -1,4 +1,4 @@
-package bershika.route.controller;
+package bershika.route.repository;
 
 import java.util.logging.Logger;
 
@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import bershika.route.model.Member;
+import bershika.route.entities.MemberEntity;
 
 // The @Stateful annotation eliminates the need for manual transaction demarcation
 @Stateful
@@ -29,13 +29,12 @@ public class MemberRegistration {
    private EntityManager em;
 
    @Inject
-   private Event<Member> memberEventSrc;
+   private Event<MemberEntity> memberEventSrc;
 
-   private Member newMember;
+   private MemberEntity newMember;
 
-   @Produces
-   @Named
-   public Member getNewMember() {
+   
+   public MemberEntity getNewMember() {
       return newMember;
    }
 
@@ -48,6 +47,6 @@ public class MemberRegistration {
 
    @PostConstruct
    public void initNewMember() {
-      newMember = new Member();
+      newMember = new MemberEntity();
    }
 }

@@ -1,15 +1,21 @@
-package bershika.route.model;
+package bershika.route.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
+@Table(name="MEMBER_HUBSERVICE")
 @IdClass(HubServiceId.class)
-public class HubService {
+public class HubServiceEntity {
+	@Id
+	@NotNull
+	@NotEmpty
+	private String email;
 	@Id
 	@NotNull
 	@NotEmpty
@@ -21,7 +27,6 @@ public class HubService {
 	@Id
 	private int rate;
 	private String notes;
-	private String email;
 	public String getCity() {
 		return city;
 	}
@@ -51,6 +56,20 @@ public class HubService {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	@Override
+	public String toString() {
+		return "HubServiceEntity [city=" + city + ", state=" + state
+				+ ", rate=" + rate + ", notes=" + notes + ", email=" + email
+				+ "]";
+	}
+	public HubServiceId getKey() {
+		HubServiceId key = new HubServiceId();
+		key.setCity(city);
+		key.setState(state);
+		key.setRate(rate);
+		key.setEmail(email);
+		return key;
 	}
 
 }

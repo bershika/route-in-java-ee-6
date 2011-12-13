@@ -1,20 +1,27 @@
-package bershika.route.model;
+package bershika.route.entities;
 
+import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
+@Table(name="HUB")
 @IdClass(LocationId.class)
-public class Hub {
+public class HubEntity implements Serializable{
 	@Id
 	@NotNull
 	@NotEmpty
@@ -29,16 +36,16 @@ public class Hub {
 	private float b1;
 	private float b2;
 	
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumns({
-		@JoinColumn(name="city", referencedColumnName="city"),
-		@JoinColumn(name="state", referencedColumnName="state")})
-	private Set<HubService>services;
-	@OneToMany
-	@JoinColumns({
-		@JoinColumn(name="city", referencedColumnName="hubName"),
-		@JoinColumn(name="state", referencedColumnName="hubState")})
-	private Set<Point>points;
+		@JoinColumn(name="hubName", referencedColumnName="city"),
+		@JoinColumn(name="hubState", referencedColumnName="state")})
+	private Set<PointEntity>points;
+	
+	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
+	@PrimaryKeyJoinColumn
+	LocationEntity location;
+	
 	public String getCity() {
 		return city;
 	}
@@ -81,19 +88,23 @@ public class Hub {
 	public void setB2(float b2) {
 		this.b2 = b2;
 	}
-	public Set<HubService> getServices() {
-		return services;
-	}
-	public void setServices(Set<HubService> services) {
-		this.services = services;
-	}
-	public Set<Point> getPoints() {
+	
+	
+	public Set<PointEntity> getPoints() {
 		return points;
 	}
-	public void setPoints(Set<Point> points) {
+	public void setPoints(Set<PointEntity> points) {
 		this.points = points;
 	}
 	
-	
+	public LocationEntity getLocation() {
+		return location;
+	}
+	public void setLocation(LocationEntity location) {
+		this.location = location;
+	}
+	public String getShortName(){
+		return city + "," + state;
+	}
 
 }

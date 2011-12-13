@@ -1,12 +1,18 @@
-package bershika.route.model;
+package bershika.route.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Digits;
@@ -19,58 +25,64 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@XmlRootElement
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
-public class Member implements Serializable {
-   /** Default value included to remove warning. Remove or modify at will. **/
-   private static final long serialVersionUID = 1L;
+@Table(name="MEMBER")
+public class MemberEntity implements Serializable {
 
-   @Id
-   @NotNull
-   @NotEmpty
-   @Email
-   private String email;
-   
-   @NotNull
-   @Size(min = 1, max = 25)
-   @Pattern(regexp = "[A-Za-z ]*", message = "must contain only letters and spaces")
-   private String name;
-   
-   @OneToOne
-   private Surcharge surcharge;
-   
-   private HubService services;
+	@Id
+	@NotNull
+	@NotEmpty
+	@Email
+	private String email;
 
-   public String getName() {
-      return name;
-   }
+	@NotNull
+	@Size(min = 1, max = 25)
+	@Pattern(regexp = "[A-Za-z ]*", message = "must contain only letters and spaces")
+	private String name;
 
-   public void setName(String name) {
-      this.name = name;
-   }
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="email", referencedColumnName="email")
+	private SurchargeEntity surcharge;
 
-   public String getEmail() {
-      return email;
-   }
+	@OneToMany
+	@JoinColumn(name="email", referencedColumnName="email")
+	private List<HubServiceEntity> services;
 
-   public void setEmail(String email) {
-      this.email = email;
-   }
+	public String getName() {
+		return name;
+	}
 
-public Surcharge getSurcharge() {
-	return surcharge;
-}
+	public void setName(String name) {
+		this.name = name;
+	}
 
-public void setSurcharge(Surcharge surcharge) {
-	this.surcharge = surcharge;
-}
+	public String getEmail() {
+		return email;
+	}
 
-public HubService getServices() {
-	return services;
-}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-public void setServices(HubService services) {
-	this.services = services;
-}
+	public SurchargeEntity getSurcharge() {
+		return surcharge;
+	}
+
+	public void setSurcharge(SurchargeEntity surcharge) {
+		this.surcharge = surcharge;
+	}
+
+	public List<HubServiceEntity> getServices() {
+		return services;
+	}
+
+	public void setServices(List<HubServiceEntity> services) {
+		this.services = services;
+	}
+
+	@Override
+	public String toString() {
+		return "MemberEntity [email=" + email + ", name=" + name
+				+ ", surcharge=" + surcharge + "]";
+	}
 
 }

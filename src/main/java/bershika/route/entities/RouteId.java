@@ -1,10 +1,12 @@
-package bershika.route.model;
+package bershika.route.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+@Embeddable
 public class RouteId implements Serializable{
 	@Size(min = 1, max = 50)
 	@Pattern(regexp = "[A-Za-z ]*", message = "must contain only letters and spaces")
@@ -18,6 +20,33 @@ public class RouteId implements Serializable{
 	@Size(min = 2, max = 2)
 	@Pattern(regexp = "[A-Z]{2}", message = "state must contain two upper letters")
 	private String destState;
+	
+	
+	public void setHubName(String hubName) {
+		this.hubName = hubName;
+	}
+	public void setHubState(String hubState) {
+		this.hubState = hubState;
+	}
+	public void setDestName(String destName) {
+		this.destName = destName;
+	}
+	public void setDestState(String destState) {
+		this.destState = destState;
+	}
+	
+	public String getHubName() {
+		return hubName;
+	}
+	public String getHubState() {
+		return hubState;
+	}
+	public String getDestName() {
+		return destName;
+	}
+	public String getDestState() {
+		return destState;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

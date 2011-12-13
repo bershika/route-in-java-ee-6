@@ -1,15 +1,17 @@
-package bershika.route.model;
+package bershika.route.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
+@Table(name="LOCATION")
 @IdClass(LocationId.class)
-public class Location {
+public class LocationEntity {
 	@Id
 	@NotNull
 	@NotEmpty

@@ -28,13 +28,6 @@
                      value="#{newMember.email}" /> <h:message
                      for="email" errorClass="invalid" /></td>
             </tr>
-            <tr>
-               <th style="text-align: right;"><h:outputLabel
-                     for="phoneNumber" value="Phone #:" /></th>
-               <td><h:inputText id="phoneNumber"
-                     value="#{newMember.phoneNumber}" /> <h:message
-                     for="phoneNumber" errorClass="invalid" /></td>
-            </tr>
          </table>
          <p>
             <h:commandButton id="register"
@@ -51,10 +44,6 @@
       <h:dataTable var="_member" value="#{members}"
          rendered="#{not empty members}">
          <h:column>
-            <f:facet name="header">Id</f:facet>
-                #{_member.id}
-            </h:column>
-         <h:column>
             <f:facet name="header">Name</f:facet>
                 #{_member.name}
             </h:column>
@@ -63,12 +52,8 @@
                 #{_member.email}
             </h:column>
          <h:column>
-            <f:facet name="header">Phone #</f:facet>
-                #{_member.phoneNumber}
-            </h:column>
-         <h:column>
             <f:facet name="header">REST URL</f:facet>
-            <a href="#{request.contextPath}/rest/members/#{_member.id}">/rest/members/#{_member.id}</a>
+            <a href="#{request.contextPath}/rest/members/#{_member.email}">/rest/members/#{_member.email}</a>
          </h:column>
          <f:facet name="footer">
                 REST URL for all members: <a
