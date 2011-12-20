@@ -9,6 +9,14 @@ public class Point {
 		this.y = y;
 	}
 
+	public float getX() {
+		return x;
+	}
+
+	public float getY() {
+		return y;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

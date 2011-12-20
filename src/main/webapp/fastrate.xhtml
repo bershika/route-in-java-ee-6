@@ -1,57 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:ui="http://java.sun.com/jsf/facelets"
-   xmlns:f="http://java.sun.com/jsf/core"
-   xmlns:h="http://java.sun.com/jsf/html"
-   xmlns:p="http://primefaces.org/ui"
-   template="/WEB-INF/templates/default.xhtml">
-   
-   <ui:define name="map">
-    <p:gmap id="gmap" zoom="13" type="HYBRID"   
-    style="width:200px;height:400px"  
-    model="#{menu.map}"/>  
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/default.xhtml">
+
+	<ui:define name="map">
+		<p:gmap id="gmap" zoom="13" type="HYBRID" center="41.381542, 2.122893"
+			style="width:350px;height:600px" model="#{menu.map}" />
 	</ui:define>
-   <ui:define name="content">
-   <h:form>
-   <p:growl id="growl"/>
-   <p:commandButton value="Create New Hub" type="button"
-                 onclick="newHub.show()"/>
-   <p:dataTable id="hubs" var="h" value="#{menu.hubsMap}">  
-  
-        <p:column headerText="Name">  
-            <h:outputText value="#{h.key}" />  
-        </p:column> 
-        <p:column>
-           <h:outputText value="#{h.value.manual}" />  
-         </p:column> 
-         <p:column>
-           <h:outputText value="#{h.value.coef1.alpha}" />  
-         </p:column> 
-          <p:column>
-           <h:outputText value="#{h.value.coef1.beta}" />  
-         </p:column> 
-          <p:column>
-           <h:outputText value="#{h.value.coef2.alpha}" />  
-         </p:column> 
-          <p:column>
-           <h:outputText value="#{h.value.coef2.beta}" />  
-         </p:column> 
-        <p:column style="width:30px">  
-             <h:panelGrid columns="3" styleClass="actions" cellpadding="2" border="0">  
-                 <p:commandButton update=":form:display" image="ui-icon ui-icon-search" title="View"
-                 action="#{menu.onHubSelect}" ajax="false">  
-                     <f:setPropertyActionListener value="#{h.key}" target="#{menu.selectedHub}"/>
-                 </p:commandButton>  
-             </h:panelGrid>  
-        </p:column>  
-  
-    </p:dataTable> 
-	<p:dialog header="Enter Hub Name" widgetVar="newHub">
+	<ui:define name="content">
+		<h:form>
+			<p:growl id="growl" showDetail="true"/>
+			<table>
+				<tr>
+					<td><p:selectOneMenu value="#{report.selectedHub}" effect="fade">
+					<f:selectItems value="#{menu.hubList}" var="#{hub}" itemValue="#{hub}"/></p:selectOneMenu></td>
+					<td><h:inputText value="#{report.destination}" size="10"/></td>
+					<td><p:commandButton value="Get Rate" update="growl"
+					action="#{report.getRate}" /></td>
+				</tr>
+			</table>
+			<p:dialog header="Enter Hub Name" widgetVar="newHub">
 				<p:inputText value="#{menu.newHubName}" />
 				<p:commandButton value="Create" update="hubs growl"
-                 action="#{menu.createHub}"/>
-	</p:dialog>
-	</h:form>
-	
-   </ui:define>
+					action="#{menu.createHub}" />
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
 </ui:composition>

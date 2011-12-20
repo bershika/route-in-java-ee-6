@@ -6,6 +6,7 @@ public class DirectionsResponse {
 	public static class Route{
 		public String summary;
 		public Leg[] legs;
+		public Polyline overview_polyline;
 	}
 	public static class Leg{
       public Distance distance;
@@ -13,7 +14,6 @@ public class DirectionsResponse {
       public GeoLocation end_location;
       public String start_address;
       public String end_address;
-      public Polyline overview_polyline;
 	}
 
 	public static class Distance{

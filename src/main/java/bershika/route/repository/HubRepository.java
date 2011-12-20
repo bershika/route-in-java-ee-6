@@ -1,5 +1,6 @@
 package bershika.route.repository;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,13 +10,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import bershika.route.controller.Member;
+import bershika.route.controller.Parser;
 import bershika.route.entities.HubEntity;
 import bershika.route.entities.HubServiceEntity;
 import bershika.route.entities.LocationEntity;
+import bershika.route.entities.LocationId;
 import bershika.route.entities.MemberEntity;
 import bershika.route.googleservice.GeocodeResponse;
 import bershika.route.googleservice.GeocodeResponse.AddressComponent;
+import bershika.route.googleservice.GoogleServiceException;
 import bershika.route.googleservice.GoogleServiceHandler;
+import bershika.route.googleservice.GoogleServiceParamException;
 
 @Stateless
 public class HubRepository implements Serializable {
@@ -50,8 +55,17 @@ public class HubRepository implements Serializable {
 		return query.getResultList();
 	}
 
-	public String createNewHub(String locName) {
-		GeocodeResponse response = google.getGeocoding(locName);
+	public HubEntity createNewHub(String locName) throws GoogleServiceException, IOException, GoogleServiceParamException, EntityExistsException {
+		LocationId id = new LocationId();
+		id.setCity(Parser.getCity(locName));
+		id.setState(Parser.getState(locName));
+		if (em.find(HubEntity.class, id) != null) {
+			throw new EntityExistsException();
+		}
+		GeocodeResponse response = GoogleServiceHandler.getGeocoding(locName);
+		if(!response.status.equalsIgnoreCase("OK")){
+			throw new GoogleServiceException(response.status);
+		}
 		HubEntity hub = new HubEntity();
 		LocationEntity location = new LocationEntity();
 		String state = null, city = null;
@@ -76,14 +90,15 @@ public class HubRepository implements Serializable {
 			hub.setLocation(location);
 			hub.setCity(city);
 			hub.setState(state);
+			
 			try {
 				em.persist(hub);
 			} catch (Exception e) {
 
 			}
+			return em.find(HubEntity.class, id);
 		}
-		return city + "," + state;
-
+		return null;
 	}
 
 }

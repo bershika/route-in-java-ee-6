@@ -1,4 +1,4 @@
-package bershika.route.view;
+package bershika.route.controller;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;

@@ -1,9 +1,9 @@
 package bershika.route.googleservice;
 
-public class OverQueryLimitException extends Exception {
+public class GoogleServiceException extends Exception {
 	private String status;
 
-	public OverQueryLimitException(String status) {
+	public GoogleServiceException(String status) {
 		this.status = status;
 	}
 

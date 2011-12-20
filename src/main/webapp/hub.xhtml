@@ -6,6 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="map">
+	<p:gmap id="gmap" zoom="13" type="HYBRID" style="width:350px;height:600px" model="#{currentHub.map}"/>  
 	</ui:define>
 	<ui:define name="content">
 		<h:form prependId="false">
@@ -14,12 +15,14 @@
 					<tr>
 						<td><h:panelGrid columns="4">
 								<f:facet name="header">
-									<p:commandButton value="Save Coefficients" update="hub"
-										actionListener="#{hubController.saveHub}" />
+									<table><tr><td>
 									<h:selectOneRadio value="#{currentHub.manualMode}">
 										<f:selectItem itemLabel="Manual" itemValue="true" />
 										<f:selectItem itemLabel="Generated" itemValue="false" />
 									</h:selectOneRadio>
+									</td><td><p:commandButton update="hub" actionListener="#{hubController.saveHub}" icon="ui-icon-disk" /></td></tr></table>
+									
+									
 
 								</f:facet>
   a1: <p:inplace style="color:#{currentHub.manualMode?'red':'green'};"><h:inputText id="a1" value="#{currentHub.a1}" size="4" style="color:#{currentHub.manualMode?'red':'#4F4F4F'};"/></p:inplace>
@@ -38,8 +41,8 @@
 						<td><p:dataTable id="services" var="s"
 								value="#{currentHub.services}">
 								<f:facet name="header">
-									<p:commandButton value="Add Service" update="services, growl"
-										actionListener="#{hubController.addServiceRow}" />
+									<p:commandLink value="Add Service" update="services, growl"
+										actionListener="#{hubController.addServiceRow}"/>
 								</f:facet>
 								<p:column headerText="Rate">
 									<h:inputText value="#{s.rate}" size="4" rendered="#{s.rate eq 0}" />
@@ -71,10 +74,8 @@
 					style="width: 600px">
 					<p:growl id="growl" showDetail="true" />
 					<h:outputText id="totalPoints" value="Total points : #{currentHub.totalPoints}" />
-					<p:commandButton type="button" value="View Points"
-						onclick="points.show()" />
-					<p:commandButton type="button" value="Add Points"
-						onclick="newPoints.show()" />
+					<a href="#" onclick="points.show()" style="float:right;">View Points</a>
+					<a href="#" onclick="newPoints.show()" style="float:right;">Add Points</a>
 					<p:lineChart id="chart" value="#{currentHub.chartModel}">
 						<p:ajax event="itemSelect" listener="#{hubController.pointSelect}" update="growl" /> </p:lineChart>
 				</div>
@@ -88,8 +89,8 @@
 							<p:column headerText="Destination" sortBy="#{p.destName}">
 								<h:outputText value="#{p.destName} , #{p.destState}" />
 							</p:column>
-							<p:column headerText="Distance" sortBy="#{p.route.distance}">
-								<h:outputText value="#{p.route.distance  / 1609.344}">
+							<p:column headerText="Distance" sortBy="#{p.route.distanceInMiles}">
+								<h:outputText value="#{p.route.distanceInMiles}">
 									<f:convertNumber maxFractionDigits="2" />
 								</h:outputText>
 							</p:column>

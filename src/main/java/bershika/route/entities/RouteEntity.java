@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.PrimaryKeyJoinColumns;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -36,6 +37,9 @@ public class RouteEntity {
 	private String destState;
 	private int distance;
 	private String encPoints;
+	
+	@Transient
+	public static final float METERS_IN_MILE = 1609.344F;
 	
 	@ManyToOne
 	@JoinColumns({
@@ -81,8 +85,8 @@ public class RouteEntity {
 		this.destState = destState;
 	}
 
-	public int getDistance() {
-		return distance;
+	public float getDistanceInMiles() {
+		return distance / METERS_IN_MILE;
 	}
 
 	public void setDistance(int distance) {

@@ -8,23 +8,31 @@
 <h:head>
    <title>THE ROUTE. Finds it fast.</title>
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
    <h:outputStylesheet name="css/screen.css" />
 </h:head>
 <h:body>
-<div class="ui-menu ui-menubar ui-widget ui-widget-content ui-corner-all ui-helper-clearfix">#{member.email} #{member.surcharge.value}</div>
-
-   <div id="container">
+<div id="header">
+<h4 id="logo">The Route</h4>
+<div class="links">
+<span>logged in as <h:outputText value="#{member.email}"/></span>
+<a href="#" onclick="dlg.show()"><h:outputText id="surcharge" value="surcharge  #{member.surcharge.value}"/></a>
+</div>
+</div>
+<div id="container">
+   
    <p:menubar>
 <p:menuitem value="Fast Rate" url="fastrate.xhtml" icon="ui-icon ui-icon-close" />  
 <p:menuitem value="Report" url="report.xhtml" icon="ui-icon ui-icon-close" />  
 <p:menuitem value="Hubs" url="hubs.xhtml" icon="ui-icon ui-icon-close" />  
 </p:menubar>
-      <div id="content">
-
+      
+      <div id="map">
           <ui:insert name="map">
                     map
           </ui:insert>
-                
+          </div>
+      <div id="content">      
          <ui:insert name="content">
                     [Template content will be inserted here]
           </ui:insert>
@@ -33,12 +41,15 @@
          <div id="sidebar">
          </div>
       <div id="footer">
-         <h:graphicImage value="/resources/gfx/logo.png" alt="Weld logo" />
-         <p>
-            This project was generated from a Maven archetype from
-            JBoss.<br />
-         </p>
       </div>
    </div>
+   <p:dialog header="Fuel Surcharge Value" widgetVar="dlg">
+		<h:form>
+			<p:inputText value="#{memberController.newSurchargeValue}" />
+			<p:commandButton update="surcharge" value="Update"
+				actionListener="#{memberController.updateSurcharge}"
+				oncomplete="dlg.hide()" />
+		</h:form>
+	</p:dialog>
 </h:body>
 </html>

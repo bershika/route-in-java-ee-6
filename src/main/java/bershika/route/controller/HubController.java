@@ -6,10 +6,7 @@ import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
-import javax.enterprise.event.Event;
-import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -28,15 +25,12 @@ import org.primefaces.event.ItemSelectEvent;
 import bershika.route.domain.Hub;
 import bershika.route.entities.HubEntity;
 import bershika.route.entities.HubServiceEntity;
-import bershika.route.entities.LocationId;
 import bershika.route.entities.MemberEntity;
 import bershika.route.entities.PointEntity;
 import bershika.route.entities.RouteId;
-import bershika.route.googleservice.GoogleServiceHandler;
 import bershika.route.repository.HubRepository;
 import bershika.route.repository.InMemoryHubRegistry;
 import bershika.route.repository.PointRegistration;
-import bershika.route.view.Messanger;
 
 @SessionScoped
 @Named
@@ -140,7 +134,7 @@ public class HubController implements Serializable {
 				utx.begin();
 				selectedService = em.merge(selectedService);
 				utx.commit();
-				HubEntity entity = hubsRegistry.findDbHubByName(currentHub.getCity(), currentHub.getState());
+				HubEntity entity = hubsRegistry.refreshHubFromDb(currentHub.getCity(), currentHub.getState());
 				initCurrentHub(entity);
 			}
 		} catch (NotSupportedException e) {
@@ -195,7 +189,7 @@ public class HubController implements Serializable {
 
 				em.remove(selectedService);
 				
-				HubEntity entity = hubsRegistry.findDbHubByName(currentHub.getCity(), currentHub.getState());
+				HubEntity entity = hubsRegistry.refreshHubFromDb(currentHub.getCity(), currentHub.getState());
 				initCurrentHub(entity);
 			}
 			utx.commit();
@@ -230,7 +224,7 @@ public class HubController implements Serializable {
 				utx.begin();
 				em.merge(selectedPoint);
 				utx.commit();
-				HubEntity entity = hubsRegistry.findDbHubByName(currentHub.getCity(), currentHub.getState());
+				HubEntity entity = hubsRegistry.refreshHubFromDb(currentHub.getCity(), currentHub.getState());
 				initCurrentHub(entity);
 			}
 		} catch (NotSupportedException e) {
@@ -266,7 +260,7 @@ public class HubController implements Serializable {
 						selectedPoint.getKey());
 				em.remove(selectedPoint);
 				utx.commit();
-				HubEntity entity = hubsRegistry.findDbHubByName(currentHub.getCity(), currentHub.getState());
+				HubEntity entity = hubsRegistry.refreshHubFromDb(currentHub.getCity(), currentHub.getState());
 				initCurrentHub(entity);
 			}
 		} catch (NotSupportedException e) {
@@ -296,7 +290,7 @@ public class HubController implements Serializable {
 
 	public void saveHub() {
 		try {
-			HubEntity entity = hubsRegistry.findDbHubByName(currentHub.getCity(), currentHub.getState());
+			HubEntity entity = hubsRegistry.refreshHubFromDb(currentHub.getCity(), currentHub.getState());
 			if (entity != null) {
 				entity.setA1(currentHub.getA1());
 				entity.setA2(currentHub.getA2());
@@ -307,6 +301,7 @@ public class HubController implements Serializable {
 				utx.begin();
 				entity = em.merge(entity);
 				utx.commit();
+				entity = hubsRegistry.refreshHubFromDb(currentHub.getCity(), currentHub.getState());
 				initCurrentHub(entity);
 			}
 		} catch (NotSupportedException e) {
@@ -356,7 +351,7 @@ public class HubController implements Serializable {
 				e.printStackTrace();
 			}
 		}
-		HubEntity entity = hubsRegistry.findDbHubByName(currentHub.getCity(), currentHub.getState());
+		HubEntity entity = hubsRegistry.refreshHubFromDb(currentHub.getCity(), currentHub.getState());
 		initCurrentHub(entity);
 	}
 	

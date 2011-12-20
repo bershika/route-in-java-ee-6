@@ -13,6 +13,7 @@ import javax.persistence.JoinColumns;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -128,8 +129,8 @@ public class PointEntity implements Serializable, Comparable{
 
 	@Override
 	public int compareTo(Object o){
-		return getRoute().getDistance()
-				- ((PointEntity)o).getRoute().getDistance();
+		return Math.round((getRoute().getDistanceInMiles())
+				- ((PointEntity)o).getRoute().getDistanceInMiles());
 	}
 
 	@Override

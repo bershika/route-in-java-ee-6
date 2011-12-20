@@ -5,33 +5,46 @@
    xmlns:h="http://java.sun.com/jsf/html"
    xmlns:p="http://primefaces.org/ui"
    template="/WEB-INF/templates/default.xhtml">
-    <ui:define name="map">
-   </ui:define>
+   
+   <ui:define name="map">
+    <p:gmap id="gmap" zoom="13" center="37.688888, -97.336111" type="terrain" style="width:350px;height:600px" model="#{menu.map}"/>  
+	</ui:define>
    <ui:define name="content">
    <h:form>
-   <p:commandButton value="Create New Hub" type="button"
-                 onclick="newHub.show()"/>
-   <p:dataTable id="hubs" var="h" value="#{menu.hubList}">  
-  
-        <p:column headerText="Name">  
-            <h:outputText value="#{h}" />  
+   <p:growl id="growl" showDetail="true" sticky="true"/>
+   <p:dataTable id="hubs" var="h" value="#{menu.hubsMap}" paginator="true" rows="10" >
+   <f:facet name="header">
+            <a href="#" onclick="newHub.show()">Create New Hub</a>
+        </f:facet> 
+        <p:column headerText="Hub">  
+            <h:outputText value="#{h.key}" />  
         </p:column> 
-         <p:column>
-            <a href="#{request.contextPath}/rest/hubs/#{h}">/rest/hubs/#{h}</a>
+        <p:column headerText="Manual">
+          <h:selectBooleanCheckbox value="#{h.value.manual}" disabled="true"/>  
          </p:column> 
-        <p:column style="width:30px">  
-             <h:panelGrid columns="3" styleClass="actions" cellpadding="2" border="0">  
+         <p:column headerText="Alpha 1">
+           <h:outputText value="#{h.value.coef1.alpha}" />  
+         </p:column> 
+          <p:column  headerText="Beta 1">
+           <h:outputText value="#{h.value.coef1.beta}" />  
+         </p:column> 
+          <p:column  headerText="Alpha 2">
+           <h:outputText value="#{h.value.coef2.alpha}" />  
+         </p:column> 
+          <p:column  headerText="Beta 2">
+           <h:outputText value="#{h.value.coef2.beta}" />  
+         </p:column> 
+        <p:column style="width:30px" headerText="View">  
                  <p:commandButton update=":form:display" image="ui-icon ui-icon-search" title="View"
                  action="#{menu.onHubSelect}" ajax="false">  
-                     <f:setPropertyActionListener value="#{h}" target="#{menu.selectedHub}"/>
+                     <f:setPropertyActionListener value="#{h.key}" target="#{menu.selectedHub}"/>
                  </p:commandButton>  
-             </h:panelGrid>  
         </p:column>  
   
     </p:dataTable> 
 	<p:dialog header="Enter Hub Name" widgetVar="newHub">
 				<p:inputText value="#{menu.newHubName}" />
-				<p:commandButton value="Create"
+				<p:commandButton value="Create" update="hubs growl"
                  action="#{menu.createHub}"/>
 	</p:dialog>
 	</h:form>
