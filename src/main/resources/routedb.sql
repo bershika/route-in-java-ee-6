@@ -19,31 +19,6 @@
 -- Table structure for table `HUB`
 --
 
-DROP TABLE IF EXISTS `HUB`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `HUB` (
-  `city` varchar(255) NOT NULL,
-  `state` varchar(255) NOT NULL,
-  `a1` float NOT NULL,
-  `a2` float NOT NULL,
-  `b1` float NOT NULL,
-  `b2` float NOT NULL,
-  `manualMode` tinyint(1) NOT NULL,
-  PRIMARY KEY (`city`,`state`),
-  KEY `locationKey` (`city`,`state`),
-  CONSTRAINT `hub_locationConstraint` FOREIGN KEY (`city`, `state`) REFERENCES `LOCATION` (`city`, `state`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `HUB`
---
-
-LOCK TABLES `HUB` WRITE;
-/*!40000 ALTER TABLE `HUB` DISABLE KEYS */;
-/*!40000 ALTER TABLE `HUB` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `LOCATION`
@@ -97,6 +72,31 @@ UNLOCK TABLES;
 --
 -- Table structure for table `MEMBER_HUBSERVICE`
 --
+DROP TABLE IF EXISTS `HUB`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `HUB` (
+  `city` varchar(255) NOT NULL,
+  `state` varchar(255) NOT NULL,
+  `a1` float NOT NULL,
+  `a2` float NOT NULL,
+  `b1` float NOT NULL,
+  `b2` float NOT NULL,
+  `manualMode` tinyint(1) NOT NULL,
+  PRIMARY KEY (`city`,`state`),
+  KEY `locationKey` (`city`,`state`),
+  CONSTRAINT `hub_locationConstraint` FOREIGN KEY (`city`, `state`) REFERENCES `LOCATION` (`city`, `state`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `HUB`
+--
+
+LOCK TABLES `HUB` WRITE;
+/*!40000 ALTER TABLE `HUB` DISABLE KEYS */;
+/*!40000 ALTER TABLE `HUB` ENABLE KEYS */;
+UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `MEMBER_HUBSERVICE`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

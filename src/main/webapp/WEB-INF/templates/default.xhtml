@@ -46,9 +46,7 @@
    <p:dialog header="Fuel Surcharge Value" widgetVar="dlg">
 		<h:form>
 			<p:inputText value="#{memberController.newSurchargeValue}" />
-			<p:commandButton update="surcharge" value="Update"
-				actionListener="#{memberController.updateSurcharge}"
-				oncomplete="dlg.hide()" />
+			
 		</h:form>
 	</p:dialog>
 </h:body>
