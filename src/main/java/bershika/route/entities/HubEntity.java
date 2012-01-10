@@ -1,6 +1,7 @@
 package bershika.route.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,6 +18,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
+import bershika.route.controller.Parser;
 
 @Entity
 @Table(name="HUB")
@@ -40,7 +43,7 @@ public class HubEntity implements Serializable{
 	@JoinColumns({
 		@JoinColumn(name="hubName", referencedColumnName="city"),
 		@JoinColumn(name="hubState", referencedColumnName="state")})
-	private Set<PointEntity>points;
+	private List<PointEntity>points;
 	
 	@OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
 	@PrimaryKeyJoinColumn
@@ -90,10 +93,10 @@ public class HubEntity implements Serializable{
 	}
 	
 	
-	public Set<PointEntity> getPoints() {
+	public List<PointEntity> getPoints() {
 		return points;
 	}
-	public void setPoints(Set<PointEntity> points) {
+	public void setPoints(List<PointEntity> points) {
 		this.points = points;
 	}
 	
@@ -106,5 +109,17 @@ public class HubEntity implements Serializable{
 	public String getShortName(){
 		return city + "," + state;
 	}
+	@Override
+	public String toString() {
+		return "HubEntity [city=" + city + ", state=" + state + ", manualMode=" + manualMode + ", a1=" + a1 + ", a2="
+				+ a2 + ", b1=" + b1 + ", b2=" + b2 + ", points= " + ((points != null)? points.size():'0') + "]";
+	}
+	public LocationId getKey() {
+		LocationId id = new LocationId();
+		id.setCity(city);
+		id.setState(state);
+		return id;
+	}
+	
 
 }

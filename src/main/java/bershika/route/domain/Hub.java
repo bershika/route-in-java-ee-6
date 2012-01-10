@@ -3,10 +3,6 @@ package bershika.route.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-
-import javax.enterprise.inject.Model;
-import javax.inject.Inject;
 
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
@@ -17,22 +13,19 @@ import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Marker;
 import org.primefaces.model.map.Polyline;
 
-import bershika.route.controller.Member;
 import bershika.route.entities.HubEntity;
 import bershika.route.entities.HubServiceEntity;
-import bershika.route.entities.MemberEntity;
 import bershika.route.entities.PointEntity;
 import bershika.route.googleservice.GeoLocation;
-import bershika.route.googleservice.GoogleServiceHandler;
+import bershika.route.googleservice.GoogleServices;
 import bershika.route.regression.Coefficients;
+import bershika.route.regression.CoefficientsGenerator;
 import bershika.route.regression.LinearRegression;
 import bershika.route.regression.Point;
 
 public class Hub extends HubEntity {
 
 	private static final long serialVersionUID = 1L;
-	
-
 	private List<HubServiceEntity> services;
 
 	private MapModel map;
@@ -68,8 +61,11 @@ public class Hub extends HubEntity {
 		setManualMode(entity.isManualMode());
 		setPoints(entity.getPoints());
 		setLocation(entity.getLocation());
+		System.out.println("Surcharge " + surcharge);
 		this.surcharge = surcharge;
-		generateCoefficients();
+		CoefficientsInfo coefs = CoefficientsGenerator.generateCoefficients(entity.getPoints(), surcharge);
+		coef1 = coefs.getCoef1();
+		coef2 = coefs.getCoef2();
 		initMap();
 		initChartModel();
 	}
@@ -99,8 +95,8 @@ public class Hub extends HubEntity {
 		ChartSeries regression = new LineChartSeries();
 
 		for (PointEntity p : getSortedPoints()) {
-			points.set(p.getRoute().getDistanceInMiles(), p.getRate()
-					* (1 + surcharge / 100));
+			points.set(p.getRoute().getDistanceInMiles(), p.getRate()/100F
+					* (1 + surcharge / 100F));
 		}
 
 		float a1 = 0, b1 = 0, a2 = 0, b2 = 0;
@@ -151,21 +147,21 @@ public class Hub extends HubEntity {
 		return getPoints().size();
 	}
 
-	public void generateCoefficients() {
-		List<Point> points1 = new ArrayList<Point>();
-		List<Point> points2 = new ArrayList<Point>();
-		Point point;
-		for (PointEntity e : getPoints()) {
-			point = new Point(e.getRoute().getDistanceInMiles(),
-					e.getRate() * (1 + surcharge / 100));
-			if (e.getRoute().getDistanceInMiles() > 100)
-				points2.add(point);
-			else
-				points1.add(point);
-		}
-		coef1 = LinearRegression.getCoefficients(points1);
-		coef2 = LinearRegression.getCoefficients(points2);
-	}
+//	public void generateCoefficients() {
+//		List<Point> points1 = new ArrayList<Point>();
+//		List<Point> points2 = new ArrayList<Point>();
+//		Point point;
+//		for (PointEntity e : getPoints()) {
+//			point = new Point(e.getRoute().getDistanceInMiles(),
+//					e.getRate()/100F * (1 + surcharge / 100F));
+//			if (e.getRoute().getDistanceInMiles() > 100)
+//				points2.add(point);
+//			else
+//				points1.add(point);
+//		}
+//		coef1 = LinearRegression.getCoefficients(points1);
+//		coef2 = LinearRegression.getCoefficients(points2);
+//	}
 
 	public void initMap() {
 		map = new DefaultMapModel();
@@ -174,15 +170,15 @@ public class Hub extends HubEntity {
 		if(getPoints() == null) return;
 		for (PointEntity p : getPoints()) {
 			Marker marker = new Marker(new LatLng(p.getRoute().getDest().getLan(), p.getRoute().getDest().getLng()), p.getDestName());  
-	        map.addOverlay(marker);  
+	        map.addOverlay(marker);
+	        
 			Polyline polyline = new Polyline();
-			polyline.setStrokeWeight(5);
+			polyline.setStrokeWeight(2);
 			polyline.setStrokeColor("#FF9900");
 			polyline.setStrokeOpacity(0.7);
 			int i = 0;
-			for (GeoLocation loc : GoogleServiceHandler.decodePoly(p.getRoute()
+			for (GeoLocation loc : GoogleServices.decodePoly(p.getRoute()
 					.getEncPoints())) {
-				System.out.println(Math.round(loc.lat)+"/" + Math.round(loc.lng));
 				polyline.getPaths().add(new LatLng(loc.lat/1000000, loc.lng/1000000));
 			}
 			map.addOverlay(polyline);

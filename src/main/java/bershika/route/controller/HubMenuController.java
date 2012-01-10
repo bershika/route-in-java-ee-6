@@ -3,13 +3,10 @@ package bershika.route.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -20,11 +17,12 @@ import org.primefaces.model.map.Marker;
 
 import bershika.route.domain.CoefficientsInfo;
 import bershika.route.entities.HubEntity;
+import bershika.route.googlehandler.GoogleHandler;
 import bershika.route.googleservice.GoogleServiceException;
 import bershika.route.googleservice.GoogleServiceParamException;
 import bershika.route.repository.EntityExistsException;
-import bershika.route.repository.HubRepository;
 import bershika.route.repository.InMemoryHubRegistry;
+import bershika.route.repository.Repository;
 
 @RequestScoped
 @Named("menu")
@@ -32,7 +30,7 @@ public class HubMenuController {
 	@Inject
 	private InMemoryHubRegistry hubsRegistry;
 	@Inject
-	private HubRepository registry;
+	private Repository repository;
 	@Inject
 	private HubController hub;
 	@Inject
@@ -86,8 +84,13 @@ public class HubMenuController {
 	}
 
 	public void createHub() {
+		System.out.println("Creating " + newHubName);
 		try {
-			HubEntity hub = registry.createNewHub(newHubName);
+			Messanger.show("Saving hub", "wait");
+			HubEntity hub = GoogleHandler.createHubEntity(newHubName);
+			hub = repository.createNewHub(hub);
+			newHubName = "";
+			hubsRegistry.retrieveAllHubsOrderedByName();
 			//hubEventSrc.fire(hub);
 		} catch (GoogleServiceException e) {
 			Messanger.show("Google maps response.", e.getMessage());
@@ -97,6 +100,9 @@ public class HubMenuController {
 			Messanger.show("Internal error.", "Something went wrong. We will look into the issue.");
 		} catch (EntityExistsException e) {
 			Messanger.show("Hub already exists!", newHubName + " already exists.");
-		} 
+		}
+		catch(Exception e){
+			Messanger.show("Error", e.getMessage());
+		}
 	}
 }

@@ -1,11 +1,15 @@
 package bershika.route.entities;
 
 import java.io.Serializable;
-
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+
 public class PointId implements Serializable{
+		/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1655169341386875365L;
 		@Size(min = 1, max = 50)
 		@Pattern(regexp = "[A-Za-z ]*", message = "must contain only letters and spaces")
 		private String hubName;
@@ -18,7 +22,7 @@ public class PointId implements Serializable{
 		@Size(min = 2, max = 2)
 		@Pattern(regexp = "[A-Z]{2}", message = "state must contain two upper letters")
 		private String destState;
-		private float rate;
+		private int rate;
 		
 		
 		
@@ -54,30 +58,28 @@ public class PointId implements Serializable{
 			this.destState = destState;
 		}
 
-		public float getRate() {
+		public int getRate() {
 			return rate;
 		}
 
-		public void setRate(float rate) {
+		public void setRate(int rate) {
 			this.rate = rate;
 		}
+
+		
 
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result
-					+ ((destName == null) ? 0 : destName.hashCode());
-			result = prime * result
-					+ ((destState == null) ? 0 : destState.hashCode());
-			result = prime * result
-					+ ((hubName == null) ? 0 : hubName.hashCode());
-			result = prime * result
-					+ ((hubState == null) ? 0 : hubState.hashCode());
-			result = prime * result + Float.floatToIntBits(rate);
+			result = prime * result + ((destName == null) ? 0 : destName.hashCode());
+			result = prime * result + ((destState == null) ? 0 : destState.hashCode());
+			result = prime * result + ((hubName == null) ? 0 : hubName.hashCode());
+			result = prime * result + ((hubState == null) ? 0 : hubState.hashCode());
+			result = prime * result + rate;
 			return result;
 		}
-		
+
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj)
@@ -107,9 +109,15 @@ public class PointId implements Serializable{
 					return false;
 			} else if (!hubState.equals(other.hubState))
 				return false;
-			if (Float.floatToIntBits(rate) != Float.floatToIntBits(other.rate))
+			if (rate != other.rate)
 				return false;
 			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "PointId [hubName=" + hubName + ", hubState=" + hubState + ", destName=" + destName + ", destState="
+					+ destState + ", rate=" + rate + "]";
 		}
 		
 }

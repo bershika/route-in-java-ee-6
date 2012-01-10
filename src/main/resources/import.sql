@@ -10,52 +10,12 @@ insert into MEMBER_HUBSERVICE(city,state, rate, email) values ('Dallas', 'TX', 1
 insert into ROUTE(hubName,hubState, destName, destState, distance) values ('Seattle', 'WA', 'Kent', 'WA', 13)
 insert into POINT(hubName,hubState, destName, destState, rate, fake) values ('Seattle', 'WA', 'Kent', 'WA', 23, false)
 
+INSERT INTO `STATES` VALUES ('AL'),('AZ'),('AR'),('CA'),('CO'),('CT'),('DE'),('DC'),('FL'),('GA'),('ID'),('IL'),('IN'),('IA'),('KS'),('KY'),('LA'),('ME'),('MD'),('MA'),('MI'),('MN'),('MS'),('MO'),('MT'),('NE'),('NV'),('NH'),('NJ'),('NM'),('NY'),('NC'),('ND'),('OH'),('OK'),('OR'),('PA'),('RI'),('SC'),('SD'),('TN'),('TX'),('UT'),('VT'),('VA'),('WA'),('WV'),('WI'),('WY');
+
+
 select * from SYNONYM;
 
-DROP TABLE IF EXISTS `POINT`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `POINT` (
-  `destName` varchar(255) NOT NULL,
-  `destState` varchar(255) NOT NULL,
-  `hubName` varchar(255) NOT NULL,
-  `hubState` varchar(255) NOT NULL,
-  `createdDate` datetime DEFAULT NULL,
-  `fake` tinyint(1) NOT NULL,
-  `rate` float NOT NULL,
-  PRIMARY KEY (`destName`,`destState`,`hubName`,`hubState`, `rate`),
-  CONSTRAINT `point_routeConstraint` FOREIGN KEY (`hubName`, `hubState`, `destName`, `destState`) REFERENCES `ROUTE` (`hubName`, `hubState`, `destName`, `destState`),
-   CONSTRAINT `point_hubConstraint` FOREIGN KEY (`hubName`, `hubState`) REFERENCES `HUB` (`city`, `state`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `POINT`
---
-
-LOCK TABLES `POINT` WRITE;
-/*!40000 ALTER TABLE `POINT` DISABLE KEYS */;
-/*!40000 ALTER TABLE `POINT` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ROUTE`
---
-
-DROP TABLE IF EXISTS `ROUTE`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ROUTE` (
-  `destName` varchar(255) NOT NULL,
-  `destState` varchar(255) NOT NULL,
-  `hubName` varchar(255) NOT NULL,
-  `hubState` varchar(255) NOT NULL,
-  `distance` int(11) NOT NULL,
-  `encPoints` text DEFAULT NULL,
-  PRIMARY KEY (`destName`,`destState`,`hubName`,`hubState`),
-  KEY `hubKey` (`hubName`,`hubState`),
-  KEY `destKey` (`destName`,`destState`),
-  CONSTRAINT `route_destConstraint` FOREIGN KEY (`destName`, `destState`) REFERENCES `LOCATION` (`city`, `state`),
-  CONSTRAINT `route_hubConstraint` FOREIGN KEY (`hubName`, `hubState`) REFERENCES `HUB` (`city`, `state`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+select * from POINT where hubName like 'Charleston' and hubState like 'SC' and destName like 'Simpsonville' and destState like 'SC' and rate = 778.95;
+select * from ROUTE where hubName like 'Charleston' and hubState like 'SC' and destName like 'Simpsonville' and destState like 'SC';
+select * from ROUTE where hubName like 'Long Beach' and hubState like 'CA' and destName like 'Carmel' and destState like 'CA';

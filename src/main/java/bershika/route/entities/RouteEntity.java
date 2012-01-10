@@ -1,14 +1,15 @@
 package bershika.route.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.PrimaryKeyJoinColumns;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name="ROUTE")
 @IdClass(RouteId.class)
-public class RouteEntity {
+public class RouteEntity implements Serializable{
 	@Id
 	@NotNull
 	@NotEmpty
@@ -41,7 +42,7 @@ public class RouteEntity {
 	@Transient
 	public static final float METERS_IN_MILE = 1609.344F;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumns({
 		@JoinColumn(name="hubName", referencedColumnName="city", insertable=false, updatable=false),
 		@JoinColumn(name="hubState", referencedColumnName="state", insertable=false, updatable=false)})
@@ -101,13 +102,13 @@ public class RouteEntity {
 		this.encPoints = encPoints;
 	}
 
-	public HubEntity getHub() {
-		return hub;
-	}
-
-	public void setHub(HubEntity hub) {
-		this.hub = hub;
-	}
+//	public HubEntity getHub() {
+//		return hub;
+//	}
+//
+//	public void setHub(HubEntity hub) {
+//		this.hub = hub;
+//	}
 
 	public LocationEntity getDest() {
 		return dest;
@@ -117,6 +118,14 @@ public class RouteEntity {
 		this.dest = dest;
 	}
 
+	public RouteId getKey(){
+		RouteId key = new RouteId();
+		key.setDestName(destName);
+		key.setDestState(destState);
+		key.setHubName(hubName);
+		key.setHubState(hubState);
+		return key;
+	}
 	@Override
 	public String toString() {
 		return "RouteEntity [hubName=" + hubName + ", hubState=" + hubState

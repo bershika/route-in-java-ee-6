@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="map">
+		<p:gmap widgetVar="gmap" zoom="13" center="37.4120, -97.2010"
+			type="HYBRID" style="width:350px;height:600px" model="#{menu.map}" />
+	</ui:define>
+	<ui:define name="content">
+	<p:growl id="growl" showDetail="true"></p:growl>
+		<h:form prependId="false">
+			<p:inputTextarea value="#{report.destinationsTA}" autoResize="FALSE"
+				style="width:300px;height:100px;" maxHeight="100"
+				effectDuration="400" />
+			<p:commandButton update="reportR rep growl" value="Upload" ajax="false"
+				action="#{report.generateReport}" />
+				<br/>
+<h:outputText id="rep" value="#{report.report}"/>
+			<p:dataTable id="reportR" var="row" value="#{report.report}">
+				<p:column headerText="Destination">
+				<h:panelGrid>
+					<h:outputText value="#{row.destInfo}" />
+				</h:panelGrid>
+				</p:column>
+				<p:column headerText="1st Choice #{row.entries[0].hubName}">
+					<h:outputText value="#{row.entries[0].serviceRate}" />
+					<h:outputText value="#{row.entries[0].serviceNotes}" />
+					<h:outputText value="#{row.entries[0].drayage}" />
+				</p:column>
+				<p:column headerText="2nd Choice  #{row.entries[1].hubName}">
+					<h:outputText value="#{row.entries[1].serviceRate}" />
+					<h:outputText value="#{row.entries[1].serviceNotes}" />
+					<h:outputText value="#{row.entries[1].drayage}" />
+				</p:column>
+				<p:column headerText="3d Choice  #{row.entries[2].hubName}">
+					<h:outputText value="#{row.entries[2].serviceRate}" />
+					<h:outputText value="#{row.entries[2].serviceNotes}" />
+					<h:outputText value="#{row.entries[2].drayage}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,5 +1,7 @@
 package bershika.route.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -11,7 +13,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name="MEMBER_HUBSERVICE")
 @IdClass(HubServiceId.class)
-public class HubServiceEntity {
+public class HubServiceEntity implements Serializable{
 	@Id
 	@NotNull
 	@NotEmpty
@@ -56,6 +58,9 @@ public class HubServiceEntity {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getShortName(){
+		return city + "," + state;
 	}
 	@Override
 	public String toString() {

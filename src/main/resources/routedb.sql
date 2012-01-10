@@ -138,7 +138,7 @@ CREATE TABLE `POINT` (
   `hubState` varchar(255) NOT NULL,
   `createdDate` datetime DEFAULT NULL,
   `fake` tinyint(1) NOT NULL,
-  `rate` float NOT NULL,
+  `rate` int(11) NOT NULL,
   PRIMARY KEY (`destName`,`destState`,`hubName`,`hubState`, `rate`),
   CONSTRAINT `point_routeConstraint` FOREIGN KEY (`hubName`, `hubState`, `destName`, `destState`) REFERENCES `ROUTE` (`hubName`, `hubState`, `destName`, `destState`),
    CONSTRAINT `point_hubConstraint` FOREIGN KEY (`hubName`, `hubState`) REFERENCES `HUB` (`city`, `state`)
@@ -174,6 +174,8 @@ CREATE TABLE `ROUTE` (
   CONSTRAINT `route_destConstraint` FOREIGN KEY (`destName`, `destState`) REFERENCES `LOCATION` (`city`, `state`),
   CONSTRAINT `route_hubConstraint` FOREIGN KEY (`hubName`, `hubState`) REFERENCES `HUB` (`city`, `state`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `ROUTE` DROP FOREIGN KEY `route_destConstraint`;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,3 +229,24 @@ CREATE TABLE `SYNONYM` (
   PRIMARY KEY (`synonym`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+DROP TABLE IF EXISTS `STATES`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `STATES` (
+  `state` varchar(2) NOT NULL,
+  PRIMARY KEY (`state`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `STATES` VALUES ('AL'),('AZ'),('AR'),('CA'),('CO'),('CT'),('DE'),('DC'),('FL'),('GA'),('ID'),('IL'),('IN'),('IA'),('KS'),('KY'),('LA'),('ME'),('MD'),('MA'),('MI'),('MN'),('MS'),('MO'),('MT'),('NE'),('NV'),('NH'),('NJ'),('NM'),('NY'),('NC'),('ND'),('OH'),('OK'),('OR'),('PA'),('RI'),('SC'),('SD'),('TN'),('TX'),('UT'),('VT'),('VA'),('WA'),('WV'),('WI'),('WY');
+
+DROP TABLE IF EXISTS `CATCHMENT`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CATCHMENT` (
+  `hub` varchar(2) NOT NULL,
+  `destination` varchar(2) NOT NULL,
+  PRIMARY KEY (`hub`, `destination`),
+  CONSTRAINT `catchmentHubConstrain` FOREIGN KEY (`hub`) REFERENCES `STATES` (`state`),
+  CONSTRAINT `catchmentDestinationConstrain` FOREIGN KEY (`destination`) REFERENCES `STATES` (`state`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

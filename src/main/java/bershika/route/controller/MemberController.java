@@ -4,23 +4,15 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-
-import bershika.route.entities.SurchargeEntity;
-
 
 import bershika.route.entities.MemberEntity;
+import bershika.route.entities.SurchargeEntity;
+import bershika.route.repository.Repository;
 
 @SessionScoped
 @Named
@@ -30,9 +22,10 @@ public class MemberController implements Serializable {
 	private Logger log;
 
 	@Inject
+	private Repository repository;
+	@Inject
 	private EntityManager em;
-	@Resource
-	private UserTransaction utx;
+	
 	private MemberEntity member;
 	
 	private Float newSurchargeValue;
@@ -64,37 +57,12 @@ public class MemberController implements Serializable {
 	}
 	
 	public void updateSurcharge(){
+		System.out.println("Updating " + newSurchargeValue);
 		SurchargeEntity entity;
 		if(validateSurcharge(newSurchargeValue)){
 			entity = member.getSurcharge();
 			entity.setValue(newSurchargeValue);
-			try {
-				utx.begin();
-				em.merge(entity);
-				utx.commit();
-			} catch (NotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RollbackException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (HeuristicMixedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (HeuristicRollbackException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+			repository.saveSurcharge(entity);
 			initMember();
 		}
 	}

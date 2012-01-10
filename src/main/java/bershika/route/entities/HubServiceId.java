@@ -2,9 +2,6 @@ package bershika.route.entities;
 
 import java.io.Serializable;
 
-import javax.persistence.Embeddable;
-
-@Embeddable
 public class HubServiceId implements Serializable{
 	private String city;
 	private String state;

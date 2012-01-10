@@ -6,8 +6,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
 import java.net.URLEncoder;
+import java.util.List;
 
 public class GoogleAPI {
 	private static final String BASIC_URL = "http://maps.googleapis.com/maps/api/";
@@ -23,11 +23,11 @@ public class GoogleAPI {
 	private static final String DEST = "destination";
 	private static final String DESTS = "destinations";
 
-	private String getURLString(final API api) {
+	private static String getURLString(final API api) {
 		return BASIC_URL + api + OUTPUT;
 	}
 
-	private String addSingleParam(String url, String param, String value) {
+	private static String addSingleParam(String url, String param, String value) {
 		try {
 			value = URLEncoder.encode(value, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -40,7 +40,7 @@ public class GoogleAPI {
 			return url + AND + param + EQ + value;
 	}
 
-	private String addParams(String url, String param, List<String> values) {
+	private static String addParams(String url, String param, List<String> values) {
 		String result = "";
 		if (url.endsWith("json"))
 			result = url + PARAM_START + param + EQ;
@@ -63,7 +63,8 @@ public class GoogleAPI {
 		return result;
 	}
 
-	private String readURL(String urlStr) throws IOException {
+	private static String readURL(String urlStr) throws IOException {
+		System.out.println("Requesting " + urlStr);
 		BufferedReader in;
 		String output = "";
 		URL url = new URL(urlStr);
@@ -79,7 +80,7 @@ public class GoogleAPI {
 
 	}
 
-	public String getGoogleService(final API api, final Object[] param) throws GoogleServiceParamException, IOException {
+	public static String getGoogleService(final API api, final Object[] param) throws GoogleServiceParamException, IOException {
 		if (api == API.geocode) {
 			if (!(param[0] instanceof String)) {
 				throw new GoogleServiceParamException();
@@ -107,7 +108,7 @@ public class GoogleAPI {
 			if(param.length != 2){
 				throw new GoogleServiceParamException();
 			}
-			if (!(param[0] instanceof List) || !(param[1] instanceof List)) {
+			if (!(param[0] instanceof List<?>) || !(param[1] instanceof List<?>)) {
 				throw new GoogleServiceParamException();
 			}
 			String url = getURLString(api);

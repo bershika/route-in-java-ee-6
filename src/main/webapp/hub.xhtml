@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="map">
-	<p:gmap id="gmap" zoom="13" type="HYBRID" style="width:350px;height:600px" model="#{currentHub.map}"/>  
+	<p:gmap widgetVar="gmap"  zoom="13" center="37.4120, -97.2010"  type="HYBRID" style="width:350px;height:600px" model="#{currentHub.map}"/>  
 	</ui:define>
 	<ui:define name="content">
 		<h:form prependId="false">
@@ -49,22 +49,19 @@
 									<h:outputText value="#{s.rate} $" rendered="#{s.rate gt 0}"/>
 								</p:column>
 								<p:column headerText="Notes">
-									<p:inplace style="color:green;" rendered="#{s.rate gt 0}"><h:inputText value="#{s.notes}" size="10"/></p:inplace>
-									<h:inputText value="#{s.notes}" size="10" rendered="#{s.rate eq 0}"/>
+									<p:inplace style="color:green;" rendered="#{s.rate gt 0}" ><h:inputText value="#{s.notes}" size="10"/></p:inplace>
 								</p:column>
 								<p:column headerText="Action">
-									<h:panelGrid columns="2" cellpadding="2">
-										<p:commandButton update="hub" image="ui-icon ui-icon-disk"
+										<p:commandButton update="hub" icon="ui-icon-disk"
 											title="Save" action="#{hubController.saveService}">
 											<f:setPropertyActionListener value="#{s}"
 												target="#{hubController.selectedService}" />
 										</p:commandButton>
-										<p:commandButton update="hub" image="ui-icon ui-icon-close"
+										<p:commandButton update="hub" icon="ui-icon-close"
 											title="Delete" action="#{hubController.deleteService}">
 											<f:setPropertyActionListener value="#{s}"
 												target="#{hubController.selectedService}" />
 										</p:commandButton>
-									</h:panelGrid>
 								</p:column>
 							</p:dataTable></td>
 					</tr>
@@ -95,36 +92,34 @@
 								</h:outputText>
 							</p:column>
 							<p:column headerText="Rate" sortBy="#{p.rate}">
-								<h:outputText value="#{p.rate}" size="6"/>
+								<h:outputText value="#{p.rate/100}" size="6"/>
 							</p:column>
 							<p:column headerText="Fake">
 								<h:selectBooleanCheckbox value="#{p.fake}" />
 							</p:column>
 							<p:column headerText="Date" sortBy="#{p.createdDate}">
 								<h:outputText value="#{p.createdDate}" >
-								 <f:convertDateTime dateStyle="full" type="date" /></h:outputText>
+								 <f:convertDateTime dateStyle="short" type="date" /></h:outputText>
 							</p:column>
 							<p:column headerText="Action">
-							<h:panelGrid columns="2" cellpadding="2" border="0">
 								<p:commandButton proccess="points" update="points chart"
-									image="ui-icon ui-icon-disk" title="Save"
+									icon="ui-icon-disk" title="Save"
 									action="#{hubController.savePoint}">
 									<f:setPropertyActionListener value="#{p}"
 										target="#{hubController.selectedPoint}" />
 								</p:commandButton>
 								<p:commandButton proccess="points" update="points chart"
-									image="ui-icon ui-icon-close" title="Delete"
+									icon="ui-icon-close" title="Delete"
 									action="#{hubController.deletePoint}">
 									<f:setPropertyActionListener value="#{p}"
 										target="#{hubController.selectedPoint}" />
 								</p:commandButton>
-								</h:panelGrid>
 							</p:column>
 						</p:dataTable>
 					</h:panelGrid>
 				</p:dialog>
 				<p:dialog header="Enter points info" widgetVar="newPoints">
-					<p:inputTextarea value="#{hubController.pointsTA}" style="width:300px;height:100px;" effectDuration="400"/>
+					<p:inputTextarea value="#{hubController.pointsTA}" autoResize="FALSE" style="width:300px;height:100px;" maxHeight="100" effectDuration="400"/>
 					<p:commandButton update="hub growl totalPoints" value="Upload"
 						action="#{hubController.uploadPoints}" />
 				</p:dialog>

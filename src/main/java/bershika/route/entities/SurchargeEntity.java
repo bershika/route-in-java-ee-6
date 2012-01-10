@@ -1,13 +1,14 @@
 package bershika.route.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="SURCHARGE")
-public class SurchargeEntity {
+public class SurchargeEntity implements Serializable{
 	@Id
 	private String email;
 	private float value;

@@ -16,9 +16,7 @@ public class DirectionsResponse {
       public String end_address;
 	}
 
-	public static class Distance{
-		public int value;
-	}
+	
 	
 	public static class Polyline{
 		public String points;

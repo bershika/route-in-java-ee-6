@@ -82,7 +82,7 @@ public class HubControllerTest {
 	      point.setHubState("WA");
 	      //point.setDestName("Tacoma");
 	      point.setDestState("WA");
-	      point.setRate(123F);
+	      point.setRate(123);
 	      hubController.savePoint();
 	      log.info(point + " was persisted" );
 	   }

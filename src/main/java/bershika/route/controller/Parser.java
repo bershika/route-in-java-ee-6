@@ -24,13 +24,10 @@ public class Parser {
 		if (tokens.length > 1) {
 			String[] names = tokens[0].trim().split(" ");
 			for(String name: names){
-				System.out.println("**************************************" + name); 
 			city += (name.substring(0, 1).toUpperCase()
 					+ name.substring(1).toLowerCase() + " ");
-			System.out.println(city);
 			}
 		}
-		System.out.println(city);
 		return city.trim();
 	}
 

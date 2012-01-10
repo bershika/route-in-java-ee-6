@@ -10,10 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -39,7 +38,8 @@ public class PointEntity implements Serializable, Comparable{
 	@NotEmpty
 	private String destState;
 	@Id
-	private float rate;
+	private int rate;
+
 	private boolean fake;
 	private Date createdDate;
 	
@@ -50,7 +50,6 @@ public class PointEntity implements Serializable, Comparable{
 		@JoinColumn(name="destName", referencedColumnName="destName", insertable=false, updatable=false),
 		@JoinColumn(name="destState", referencedColumnName="destState", insertable=false, updatable=false)
 	})
-//	@PrimaryKeyJoinColumn
 	private RouteEntity route;
 
 	public String getHubName() {
@@ -85,11 +84,11 @@ public class PointEntity implements Serializable, Comparable{
 		this.destState = destState;
 	}
 
-	public float getRate() {
+	public int getRate() {
 		return rate;
 	}
 
-	public void setRate(float rate) {
+	public void setRate(int rate) {
 		this.rate = rate;
 	}
 

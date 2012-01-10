@@ -9,14 +9,15 @@ import bershika.route.entities.PointEntity;
 
 public class CoefficientsGenerator {
 	
-	public static CoefficientsInfo generateCoefficients(Set<PointEntity> points, float surcharge) {
+	public static CoefficientsInfo generateCoefficients(List<PointEntity> points, float surcharge) {
 		List<Point> points1 = new ArrayList<Point>();
 		List<Point> points2 = new ArrayList<Point>();
-		
 		Point point;
+		int i = 0;
 		for (PointEntity e : points) {
+			
 			point = new Point(e.getRoute().getDistanceInMiles(),
-					e.getRate() * (1 + surcharge / 100));
+					e.getRate() /100F * (1 + surcharge / 100F));
 			if (e.getRoute().getDistanceInMiles() > 100)
 				points2.add(point);
 			else

@@ -1,5 +1,7 @@
 package bershika.route.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -11,7 +13,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @Table(name="LOCATION")
 @IdClass(LocationId.class)
-public class LocationEntity {
+public class LocationEntity implements Serializable{
 	@Id
 	@NotNull
 	@NotEmpty

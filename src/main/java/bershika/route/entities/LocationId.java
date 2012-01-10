@@ -6,7 +6,6 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Embeddable
 public class LocationId implements Serializable{
 	@Size(min = 1, max = 50)
 	@Pattern(regexp = "[A-Za-z ]*", message = "must contain only letters and spaces")

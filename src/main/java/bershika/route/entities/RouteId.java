@@ -91,6 +91,11 @@ public class RouteId implements Serializable{
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "RouteId [from " + hubName + "," + hubState + " to " + destName + ","
+				+ destState + "]";
+	}
 	
 	
 }

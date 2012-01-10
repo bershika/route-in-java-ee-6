@@ -5,7 +5,7 @@ import java.util.List;
 public final class LinearRegression {
 
 	private static Point getAvgPoint(final List<Point> points) {
-		Point avgP = null;
+		Point avgP = new Point(0, 0);;
 		int n = points.size();
 		if (n > 0) {
 			float sumX = 0, sumY = 0;
@@ -19,10 +19,12 @@ public final class LinearRegression {
 	}
 
 	public static Coefficients getCoefficients(final List<Point> points){
+		
 		int n = points.size() - 1;
 		if(n < 1) return new Coefficients(0F,0F);
 		Point avgP = getAvgPoint(points);
 		float sumXY = 0, sumX2 = 0;
+		
 		for(Point p : points){
 			sumXY += ((p.x - avgP.x)*(p.y - avgP.y));
 			sumX2 += Math.pow((p.x - avgP.x), 2);

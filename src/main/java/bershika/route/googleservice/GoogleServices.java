@@ -6,10 +6,9 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
-public class GoogleServiceHandler {
+public class GoogleServices {
 
 	private static Gson gson = new Gson();
-	private static GoogleAPI google = new GoogleAPI();
 	
 	
 	public static GeocodeResponse getGeocoding(String location) throws GoogleServiceParamException, IOException{
@@ -17,23 +16,36 @@ public class GoogleServiceHandler {
 		param = new String[1];
 		param[0] = location;
 		GeocodeResponse response = null;
-		String responseStr = google.getGoogleService(GoogleAPI.API.geocode, param);
+		String responseStr = GoogleAPI.getGoogleService(GoogleAPI.API.geocode, param);
 		response = gson.fromJson(responseStr, GeocodeResponse.class);
 		return response;
 	}
 	
-	public static DirectionsResponse getDirections(String from, String to) throws GoogleServiceParamException, IOException{
+	public static DirectionsResponse getDirections(String from, String to) 
+			throws GoogleServiceParamException, IOException{
 		Object[] param;
 		param = new String[2];
 		param[0] = from;
 		param[1] = to;
 		DirectionsResponse response = null;
-			String responseStr = google.getGoogleService(GoogleAPI.API.directions, param);
+			String responseStr = GoogleAPI.getGoogleService(GoogleAPI.API.directions, param);
 			response = gson.fromJson(responseStr, DirectionsResponse.class);
 		return response;
 	}
+	
+	public static DistanceMatrixResponse getDistanceMatrix(List<String> from, List<String> to) 
+			throws GoogleServiceParamException, IOException{
+		Object[] param;
+		param = new Object[2];
+		param[0] = from;
+		param[1] = to;
+		DistanceMatrixResponse response = null;
+			String responseStr = GoogleAPI.getGoogleService(GoogleAPI.API.distancematrix, param);
+			response = gson.fromJson(responseStr, DistanceMatrixResponse.class);
+		return response;
+	}
+	
 	public static List<GeoLocation> decodePoly(String encoded) {
-
 	    List<GeoLocation> poly = new ArrayList<GeoLocation>();
 	    int index = 0, len = encoded.length();
 	    int lat = 0, lng = 0;
